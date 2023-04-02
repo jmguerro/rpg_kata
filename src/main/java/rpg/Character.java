@@ -9,8 +9,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Character {
 
-    private int hp;
+    public int hp;
     private int level;
     private Boolean alive;
+
+    public void attack(int dmg , Character who){
+
+        hp = who.getHp() - dmg;
+        who.setHp(hp);
+        isAlive(who);
+    }
+
+    public void isAlive(Character who){
+        if(getHp() <= 0){
+            who.setAlive(false);
+        }
+    }
 
 }

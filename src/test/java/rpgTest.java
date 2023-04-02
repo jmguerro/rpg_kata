@@ -40,5 +40,33 @@ public class rpgTest {
         assertEquals(true,test.getAlive());
     }
 
+    @Test
+    void attackTest(){
+
+        //Given
+        Character test = new Character(1000,1,true);
+        Character test2 = new Character(60,1,true);
+        //When
+        test.attack(50,test2);
+
+        //Then
+        assertEquals(10,test2.getHp());
+    }
+
+    @Test
+    void isChar2Alive(){
+
+        //Given
+        Character test = new Character(1000,1,true);
+        Character test2 = new Character(50,1,true);
+        //When
+        test.attack(50,test2);
+
+        //Then
+        assertEquals(false,test2.getAlive());
+    }
+
+
+
 
 }
