@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import rpg.exception.ActionException;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 @Data
@@ -18,11 +21,13 @@ public class Character {
     private int level;
     private Boolean alive;
     private Range range;
+    private List<Faction> factionsList;
+
 
 
     public void attack(int dmg, Character who) {
 
-        if (who.alive.equals(true) && this != who) {
+        if (who.alive.equals(true) && this != who && !sameFaction(who)) {
 
             isInRange(dmg, who);
         } else {
@@ -31,7 +36,7 @@ public class Character {
     }
 
     public void heal(int heal, Character who) {
-        if (alive && this == who) {
+        if (alive && this == who || sameFaction(who)) {
             hp = Math.min(hp + heal, 1000);
             who.setHp(hp);
         } else {
@@ -47,10 +52,10 @@ public class Character {
 
 
     public void isInRange(int dmg , Character who) {
-        int rangeDiff = getRange().ordinal() - who.getRange().ordinal();
 
+        int rangeDiff = getRange().getRange() - who.getRange().getRange();
        switch (rangeDiff){
-           case 18,0,1 -> damageBasedOnLevel(dmg, who);
+           case 18,0 -> damageBasedOnLevel(dmg, who);
            default ->
                throw new ActionException("No estas en rango");
        }
@@ -81,5 +86,37 @@ public class Character {
 
 
     }
+
+    private void joinFaction(Character who,Faction faction){
+
+        switch (faction){
+            case OGRES -> who.setFactionsList(Collections.singletonList(Faction.OGRES));
+            case HUMANS -> who.setFactionsList(Collections.singletonList(Faction.HUMANS));
+            case UNDEAD -> who.setFactionsList(Collections.singletonList(Faction.UNDEAD));
+            case ELFS -> who.setFactionsList(Collections.singletonList(Faction.ELFS));
+            default ->
+                throw new ActionException("No faction found.");
+        }
+
+    }
+
+    private void leaveFaction(Character who,Faction faction){
+
+        if (who.getFactionsList() != null){
+        switch (faction){
+            case OGRES, UNDEAD, HUMANS, ELFS -> who.setFactionsList(null);
+            default ->
+                    throw new ActionException("No faction found.");
+        }}
+
+    }
+
+    private boolean sameFaction(Character who){
+        if (getFactionsList().stream().anyMatch((Predicate<? super Faction>) who.getFactionsList())){
+            return true;
+        }
+        return false;
+    }
+
 
 }
