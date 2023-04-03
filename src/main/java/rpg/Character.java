@@ -17,16 +17,14 @@ public class Character {
     public void attack(int dmg, Character who) {
 
         if (who.alive.equals(true) && this != who) {
-            hp = who.getHp() - dmg;
-            who.setHp(hp);
-            isAlive(who);
+            damageBasedOnLevel(dmg, who);
         } else {
             throw new ActionException("Cannot attack");
         }
     }
 
     public void heal(int heal, Character who) {
-        if (who.alive.equals(true) && this == who) {
+        if (alive && this == who) {
             hp = Math.min(hp + heal, 1000);
             who.setHp(hp);
         } else {
@@ -38,6 +36,28 @@ public class Character {
         if (getHp() <= 0) {
             who.setAlive(false);
         }
+    }
+
+
+    public void damageBasedOnLevel(int dmg, Character who) {
+
+        int levelDiff = getLevel() - who.getLevel();
+        if (levelDiff >= -4 && levelDiff <= 4) {
+            hp = Math.toIntExact(Math.round(who.getHp() - dmg));
+            who.setHp(hp);
+            isAlive(who);
+
+        } else if (levelDiff > -4) {
+            hp = Math.toIntExact(Math.round(who.getHp() - (dmg * 1.5)));
+            who.setHp(hp);
+            isAlive(who);
+        } else if (levelDiff < -4) {
+            hp = Math.toIntExact(Math.round(who.getHp() - (dmg * 0.5)));
+            who.setHp(hp);
+            isAlive(who);
+        }
+
+
     }
 
 }

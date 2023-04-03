@@ -42,16 +42,42 @@ public class rpgTest {
     }
 
     @Test
-    void attackTest(){
+    void attackTestNoLvlDiff(){
 
         //Given
-        Character test = new Character(1000,1,true);
-        Character test2 = new Character(60,1,true);
+        Character attacker = new Character(1000,1,true);
+        Character car = new Character(60,2,true);
         //When
-        test.attack(50,test2);
+        attacker.attack(50,car);
 
         //Then
-        assertEquals(10,test2.getHp());
+        assertEquals(10,car.getHp());
+    }
+
+    @Test
+    void attackTestLvlDiffDonw4(){
+
+        //Given
+        Character attacker = new Character(1000,6,true);
+        Character car = new Character(60,1,true);
+        //When
+        attacker.attack(10,car);
+
+        //Then
+        assertEquals(45,car.getHp());
+    }
+
+    @Test
+    void attackTestLvlDiffUp4(){
+
+        //Given
+        Character attacker = new Character(1000,1,true);
+        Character car = new Character(60,6,true);
+        //When
+        attacker.attack(10,car);
+
+        //Then
+        assertEquals(55,car.getHp());
     }
 
     @Test
@@ -132,5 +158,29 @@ public class rpgTest {
         //Then
         assertThrows(ActionException.class,() -> test.heal(50,test2));
     }
+
+    @Test
+    void damageBasedOnLevelLevelBehing(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(10,1,true);
+        //When
+
+        //Then
+        assertThrows(ActionException.class,() -> test.heal(50,test2));
+    }
+
+
+    @Test
+    void damageBasedOnBonusLevelAhead(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(10,1,true);
+        //When
+
+        //Then
+        assertThrows(ActionException.class,() -> test.heal(50,test2));
+    }
+
 
 }
