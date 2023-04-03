@@ -57,7 +57,7 @@ public class rpgTest {
     void isChar2Alive(){
 
         //Given
-        Character test = new Character(1000,1,true);
+         Character test = new Character(1000,1,true);
         Character test2 = new Character(50,1,true);
         //When
         test.attack(50,test2);
@@ -66,7 +66,41 @@ public class rpgTest {
         assertEquals(false,test2.getAlive());
     }
 
+    @Test
+    void damageWhenNotAlive(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(0,1,false);
+        //When
+        test.attack(50,test2);
+        //Then
+        assertEquals(0,test2.getHp());
+        assertEquals(false,test2.getAlive());
+    }
 
+    @Test
+    void healWhenAlive(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(10,1,true);
+        //When
+        test.heal(50,test2);
+        //Then
+        assertEquals(60,test2.getHp());
+        assertEquals(true,test2.getAlive());
+    }
+
+    @Test
+    void healWhenNotAlive(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(0,1,false);
+        //When
+        test.heal(50,test2);
+        //Then
+        assertEquals(0,test2.getHp());
+        assertEquals(false,test2.getAlive());
+    }
 
 
 }
