@@ -1,7 +1,8 @@
 import org.junit.jupiter.api.Test;
 import rpg.Character;
+import rpg.exception.ActionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class rpgTest {
 
@@ -72,35 +73,64 @@ public class rpgTest {
         Character test = new Character(100,1,true);
         Character test2 = new Character(0,1,false);
         //When
-        test.attack(50,test2);
+
         //Then
-        assertEquals(0,test2.getHp());
-        assertEquals(false,test2.getAlive());
+        assertThrows(ActionException.class,() ->   test.attack(50,test2));
+    }
+
+    @Test
+    void damageToSelf(){
+        //Given
+        Character test2 = new Character(1000,1,true);
+        //When
+
+        //Then
+        assertThrows(ActionException.class,() ->   test2.attack(50,test2));
     }
 
     @Test
     void healWhenAlive(){
         //Given
-        Character test = new Character(100,1,true);
+
         Character test2 = new Character(10,1,true);
         //When
-        test.heal(50,test2);
+        test2.heal(50,test2);
         //Then
         assertEquals(60,test2.getHp());
         assertEquals(true,test2.getAlive());
     }
 
     @Test
-    void healWhenNotAlive(){
+    void healWhenAliveLimit1000(){
         //Given
-        Character test = new Character(100,1,true);
-        Character test2 = new Character(0,1,false);
+
+        Character test2 = new Character(1000,1,true);
         //When
-        test.heal(50,test2);
+        test2.heal(50,test2);
         //Then
-        assertEquals(0,test2.getHp());
-        assertEquals(false,test2.getAlive());
+        assertEquals(1000,test2.getHp());
+        assertEquals(true,test2.getAlive());
     }
 
+    @Test
+    void healWhenNotAlive(){
+        //Given
+
+        Character test2 = new Character(0,1,false);
+        //When
+        //Then
+        assertThrows(ActionException.class,() -> test2.heal(50,test2));
+    }
+
+    @Test
+    void healFromSomeoneelse(){
+        //Given
+        Character test = new Character(100,1,true);
+        Character test2 = new Character(10,1,true);
+        //When
+
+        //Then
+        assertThrows(ActionException.class,() -> test.heal(50,test2));
+    }
 
 }

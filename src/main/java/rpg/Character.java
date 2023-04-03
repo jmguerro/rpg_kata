@@ -3,6 +3,7 @@ package rpg;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rpg.exception.ActionException;
 
 @Data
 @AllArgsConstructor
@@ -15,21 +16,21 @@ public class Character {
 
     public void attack(int dmg, Character who) {
 
-        if (who.alive.equals(true)) {
+        if (who.alive.equals(true) && this != who) {
             hp = who.getHp() - dmg;
             who.setHp(hp);
             isAlive(who);
         } else {
-
+            throw new ActionException("Cannot attack");
         }
     }
 
     public void heal(int heal, Character who) {
-        if (who.alive.equals(true)) {
-            hp = who.getHp() + heal;
+        if (who.alive.equals(true) && this == who) {
+            hp = Math.min(hp + heal, 1000);
             who.setHp(hp);
         } else {
-
+            throw new ActionException("Cannot heal.");
         }
     }
 
